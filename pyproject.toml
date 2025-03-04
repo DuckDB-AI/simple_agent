@@ -1,0 +1,21 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "simple_agent"
+version = "v0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+python-dotenv = "*"
+httpx = ">=0.25.2"
+langchain-community = "^0.3.17"
+openai = "^1.64.0"
+
+[tool.poetry.dependencies.naptha-sdk]
+git = "https://github.com/NapthaAI/naptha-sdk.git"
+branch = "plugins"
