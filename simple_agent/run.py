@@ -21,7 +21,7 @@ def add_numbers_tool(query: str) -> str:
         return "Error: Could not parse integers from query."
 
 
-def simple_agent():
+def simple_agent(question=None):
     # Define a prompt template
     template = """You are a helpful assistant. Answer the following question as best you can:
     Question: {question}"""
@@ -45,7 +45,6 @@ def simple_agent():
         )
     ]
 
-    # Create an agent executor using initialize_agent
     agent_executor = initialize_agent(
         tools,
         OpenAI(temperature=0),
@@ -53,10 +52,7 @@ def simple_agent():
         verbose=True
     )
 
-    # AgentExecutor usage
-    question = "Add 10 and 20, then tell me the result."
-    agent_response = agent_executor.run(question)
-    print("AgentExecutor response:", agent_response)
+    return agent_executor
 
 def run(module_run: Dict, *args, **kwargs):
     """
@@ -76,11 +72,15 @@ def run(module_run: Dict, *args, **kwargs):
 
     # If func_name requests 'agent_name', create and run the agent
     if module_run.inputs.func_name == "simple_agent":
-        the_agent = simple_agent()
         user_question = module_run.inputs.func_input_data.get("description", "")
         expected_output = module_run.inputs.func_input_data.get("expected_output", "Analysis results")
         if not user_question:
             return {"error": "No question provided in func_input_data['description']."}
+        
+        # Call the agent with the user's question and return the result
+        agent_executor = simple_agent()
+        result = agent_executor.run(user_question)
+        return {"result": result}
     else:
         # Fallback for other functions
         import inspect
@@ -117,13 +117,14 @@ if __name__ == "__main__":
     )
 
     example_inputs = {
-        "description": "What is the largest five digit prime number",
-        "expected_output": "the largest prime number"
+        "description": "What is the sum of 243435343 and 3254354353",
+        "expected_output": "the sum "
     }
 
     input_params = {
         "func_name": "simple_agent",
-        "func_input_data": example_inputs
+        "func_input_data": example_inputs,
+        "question": example_inputs["description"]
     }
 
     module_run = {
