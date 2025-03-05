@@ -45,14 +45,13 @@ def simple_agent(question=None):
         )
     ]
 
-    agent_executor = initialize_agent(
+    # Create and return the agent executor
+    return initialize_agent(
         tools,
         OpenAI(temperature=0),
         agent="zero-shot-react-description",
         verbose=True
     )
-
-    return agent_executor
 
 def run(module_run: Dict, *args, **kwargs):
     """
@@ -77,10 +76,14 @@ def run(module_run: Dict, *args, **kwargs):
         if not user_question:
             return {"error": "No question provided in func_input_data['description']."}
         
-        # Call the agent with the user's question and return the result
+        # Create the agent executor
         agent_executor = simple_agent()
+        
+        # Execute the agent with the user's question and return the result
         result = agent_executor.run(user_question)
-        return {"result": result}
+        
+        # Return the result directly (not as a dictionary)
+        return result
     else:
         # Fallback for other functions
         import inspect
