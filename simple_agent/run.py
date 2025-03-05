@@ -2,8 +2,6 @@ import os
 from langchain_community.llms.openai import OpenAI
 from langchain_core.tools.simple import Tool
 from langchain.agents.initialize import initialize_agent
-from langchain_core.prompts.prompt import PromptTemplate
-from langchain.chains.llm import LLMChain
 from dotenv import load_dotenv
 from typing import Dict
 from naptha_sdk.schemas import *
@@ -21,22 +19,7 @@ def add_numbers_tool(query: str) -> str:
         return "Error: Could not parse integers from query."
 
 
-def simple_agent(question=None):
-    # Define a prompt template
-    template = """You are a helpful assistant. Answer the following question as best you can:
-    Question: {question}"""
-
-    prompt = PromptTemplate(
-        input_variables=["question"],
-        template=template
-    )
-
-    # Create an LLMChain for a direct LLM prompt
-    llm_chain = LLMChain(
-        llm=OpenAI(temperature=0),
-        prompt=prompt
-    )
-    # Define the tool
+def simple_agent():
     tools = [
         Tool(
             name="Addition Tool",
@@ -127,7 +110,6 @@ if __name__ == "__main__":
     input_params = {
         "func_name": "simple_agent",
         "func_input_data": example_inputs,
-        "question": example_inputs["description"]
     }
 
     module_run = {
