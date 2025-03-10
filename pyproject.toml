@@ -1,24 +1,21 @@
-[project]
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
 name = "simple_agent"
 version = "v0.1.0"
 description = ""
 authors = []
-requires-python = "<3.13,>=3.10"
 readme = "README.md"
-dependencies = [
-    "python-dotenv",
-    "httpx>=0.25.2",
-    "langchain-community<1.0.0,>=0.3.17",
-    "openai<2.0.0,>=1.64.0",
-    "naptha-sdk @ git+https://github.com/NapthaAI/naptha-sdk.git@plugins",
-]
 
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+python-dotenv = "*"
+httpx = ">=0.25.2"
+langchain-community = "^0.3.17"
+openai = "^1.64.0"
 
-[tool.uv.sources]
-naptha-sdk = { git = "https://github.com/NapthaAI/naptha-sdk.git", branch = "plugins" }
-
-[tool.pdm.build]
-includes = []
+[tool.poetry.dependencies.naptha-sdk]
+git = "https://github.com/NapthaAI/naptha-sdk.git"
+branch = "plugins"
